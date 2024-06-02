@@ -52,6 +52,15 @@ export default {
         // in CSS-in-JS empty classes (i.e. css``) may be used for purposes
         // inside JS.
         "block-no-empty": null,
+
+        // :global is frequently used in CSS-in-JS solutions to allow unscoped
+        // css from being written from within the css`` directive
+        "selector-pseudo-class-no-unknown": [
+          true,
+          {
+            ignorePseudoClasses: ["global"],
+          },
+        ],
       },
     },
   ],
