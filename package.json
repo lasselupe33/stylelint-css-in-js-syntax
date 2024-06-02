@@ -1,0 +1,77 @@
+{
+  "name": "stylelint-css-in-js-syntax",
+  "version": "0.0.0",
+  "description": "",
+  "types": "./src/index.ts",
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/mjs/index.mjs",
+  "exports": {
+    "./stylelint": {
+      "types": "./src/stylelint/plugin.ts",
+      "import": "./lib/mjs/stylelint/plugin.mjs",
+      "require": "./lib/cjs/stylelint/plugin.js",
+      "default": "./lib/cjs/stylelint/plugin.js"
+    },
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./lib/mjs/index.mjs",
+      "require": "./lib/cjs/index.js",
+      "default": "./lib/cjs/index.js"
+    }
+  },
+  "files": [
+    "lib/**",
+    "src/**"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "stylelint",
+    "stylelintplugin",
+    "css",
+    "linaria",
+    "css-in-js",
+    "parser",
+    "syntax"
+  ],
+  "scripts": {
+    "build": "rm -rf ./lib && ROLLUP__FORMAT=cjs rollup -c rollup.config.js && ROLLUP__FORMAT=esm rollup -c rollup.config.js",
+    "watch": "ROLLUP__FORMAT=cjs rollup -c rollup.config.js --watch; ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
+    "eslint:files": "eslint",
+    "eslint:plugin": "yarn eslint:files 'src/**/*.{ts,tsx}' --ignore-pattern '**/tests/**/*.ts' --ignore-pattern '**/tests/**/*.tsx'",
+    "stylelint:files": "stylelint",
+    "stylelint:dummy": "yarn stylelint './dummy/**/*.css'",
+    "prepublishOnly": "yarn build",
+    "test": "jest --cache --config=.jestrc.json",
+    "type-check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.3.0",
+    "@commitlint/config-conventional": "^19.2.2",
+    "@swc/core": "^1.5.24",
+    "@swc/helpers": "^0.5.11",
+    "@swc/jest": "^0.2.36",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.13.0",
+    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/parser": "^7.11.0",
+    "@typescript-eslint/scope-manager": "^7.11.0",
+    "esbuild": "^0.21.4",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-comment-length": "^1.7.3",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "jest": "^29.7.0",
+    "prettier": "^3.3.0",
+    "rollup": "^4.18.0",
+    "rollup-plugin-esbuild": "^6.1.1",
+    "stylelint": "^16.6.1",
+    "stylelint-css-in-js-syntax": "link:./",
+    "stylelint-config-recommended": "^14.0.0",
+    "stylelint-no-unsupported-browser-features": "^8.0.1",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "postcss": "^8.4.38"
+  }
+}
