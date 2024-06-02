@@ -1,6 +1,7 @@
 import rootPostcss, { ProcessOptions } from "postcss";
 
-import { stringifyExpressions } from "../rules/css/grouped-declarations/util.stringify-expressions";
+import { stringifyExpressions } from "./util.stringify-expressions";
+
 const postcss = rootPostcss();
 
 export function parser(content: string, opts: ProcessOptions) {
@@ -16,7 +17,12 @@ export function parser(content: string, opts: ProcessOptions) {
 
   const safeCssString = stringifyExpressions(quasis, expressions);
 
-  return postcss.process(safeCssString, { from: opts.from, to: opts.to }).root;
+  const x = postcss.process(safeCssString, {
+    from: opts.from,
+    to: opts.to,
+  }).root;
+
+  return x;
 }
 
 let cssInJSOccurrence = 0;
@@ -34,12 +40,14 @@ function extractInlineCss(content: string): string {
     if (
       !extractingCss &&
       currentChar === "c" &&
-      content.slice(cursor, cursor + 4) === "css`"
+      content.slice(cursor, cursor + 4) === "css`" &&
+      content.slice(cursor - 1, cursor + 4) !== '"css`'
     ) {
       extractingCss = true;
 
+      const newlineCount = current.split("\n").length - 1;
       surrounding.push(
-        `/*___js___${Buffer.from(current).toString("base64")}*/`,
+        `/*___js___${Buffer.from(current).toString("base64")}___js-end___${"\n".repeat(newlineCount)}*/`,
       );
       current = "";
 
@@ -51,7 +59,7 @@ function extractInlineCss(content: string): string {
       extractingCss = false;
 
       css.push(
-        `/*___start___*/.class${cssInJSOccurrence++}{${current}}/*___end___*/`,
+        `/*___start___*/.css${cssInJSOccurrence++}{${current}}/*___end___*/`,
       );
       current = "";
       continue;
@@ -60,7 +68,10 @@ function extractInlineCss(content: string): string {
     current += content[cursor];
   }
 
-  surrounding.push(`/*___js___${Buffer.from(current).toString("base64")}*/`);
+  const newlineCount = current.split("\n").length - 1;
+  surrounding.push(
+    `/*___js___${Buffer.from(current).toString("base64")}___js-end___${"\n".repeat(newlineCount)}*/`,
+  );
 
   let cssString = "";
 

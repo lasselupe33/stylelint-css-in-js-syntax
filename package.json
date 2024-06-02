@@ -6,11 +6,11 @@
   "main": "./lib/cjs/index.js",
   "module": "./lib/mjs/index.mjs",
   "exports": {
-    "./stylelint": {
-      "types": "./src/stylelint/plugin.ts",
-      "import": "./lib/mjs/stylelint/plugin.mjs",
-      "require": "./lib/cjs/stylelint/plugin.js",
-      "default": "./lib/cjs/stylelint/plugin.js"
+    "./syntax": {
+      "types": "./src/syntax.ts",
+      "import": "./lib/mjs/syntax.mjs",
+      "require": "./lib/cjs/syntax.js",
+      "default": "./lib/cjs/syntax.js"
     },
     ".": {
       "types": "./src/index.ts",
@@ -35,11 +35,11 @@
   ],
   "scripts": {
     "build": "rm -rf ./lib && ROLLUP__FORMAT=cjs rollup -c rollup.config.js && ROLLUP__FORMAT=esm rollup -c rollup.config.js",
-    "watch": "ROLLUP__FORMAT=cjs rollup -c rollup.config.js --watch; ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch",
+    "watch": "concurrently 'ROLLUP__FORMAT=cjs rollup -c rollup.config.js --watch' 'ROLLUP__FORMAT=esm rollup -c rollup.config.js --watch'",
     "eslint:files": "eslint",
     "eslint:plugin": "yarn eslint:files 'src/**/*.{ts,tsx}' --ignore-pattern '**/tests/**/*.ts' --ignore-pattern '**/tests/**/*.tsx'",
     "stylelint:files": "stylelint",
-    "stylelint:dummy": "yarn stylelint './dummy/**/*.css'",
+    "stylelint:dummy": "yarn stylelint:files './dummy/debug.ts'",
     "prepublishOnly": "yarn build",
     "test": "jest --cache --config=.jestrc.json",
     "type-check": "tsc --noEmit"
@@ -55,6 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^7.11.0",
     "@typescript-eslint/parser": "^7.11.0",
     "@typescript-eslint/scope-manager": "^7.11.0",
+    "concurrently": "^8.2.2",
     "esbuild": "^0.21.4",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -67,7 +68,7 @@
     "rollup-plugin-esbuild": "^6.1.1",
     "stylelint": "^16.6.1",
     "stylelint-css-in-js-syntax": "link:./",
-    "stylelint-config-recommended": "^14.0.0",
+    "stylelint-config-standard": "^36.0.0",
     "stylelint-no-unsupported-browser-features": "^8.0.1",
     "typescript": "^5.4.5"
   },

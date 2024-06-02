@@ -9,13 +9,20 @@
     "typescriptreact"
   ],
   "eslint.onIgnoredFiles": "warn",
+  "stylelint.validate": [
+    "css",
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit",
     "source.fixAll.stylelint": "explicit"
   },
   "jest.jestCommandLine": "yarn test",
-  "jest.runMode": { 
+  "jest.runMode": {
     "testFileOnly": true,
-    "type": "on-save",
+    "type": "on-save"
   }
 }
