@@ -17,17 +17,17 @@ export function parser(content: string, opts: ProcessOptions) {
 
   const safeCssString = stringifyExpressions(quasis, expressions);
 
-  const x = postcss.process(safeCssString, {
+  const parsed = postcss.process(safeCssString, {
     from: opts.from,
     to: opts.to,
   }).root;
 
-  return x;
+  return parsed;
 }
 
-let cssInJSOccurrence = 0;
-
 function extractInlineCss(content: string): string {
+  let cssInJSOccurrence = 0;
+
   const surrounding = [] as Array<string>;
   const css = [] as string[];
 
