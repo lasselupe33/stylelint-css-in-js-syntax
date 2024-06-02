@@ -32,18 +32,19 @@ function extractInlineCss(content: string): string {
   const css = [] as string[];
 
   let current = "";
-  let extractingCss = false;
+  let isExtractingCss = false;
+  let expressionEvaluationIndentation = 0;
 
   for (let cursor = 0; cursor < content.length; cursor++) {
     const currentChar = content[cursor];
 
     if (
-      !extractingCss &&
+      !isExtractingCss &&
       currentChar === "c" &&
       content.slice(cursor, cursor + 4) === "css`" &&
       content.slice(cursor - 1, cursor + 4) !== '"css`'
     ) {
-      extractingCss = true;
+      isExtractingCss = true;
 
       const newlineCount = current.split("\n").length - 1;
       surrounding.push(
@@ -55,8 +56,32 @@ function extractInlineCss(content: string): string {
       continue;
     }
 
-    if (extractingCss && currentChar === "`") {
-      extractingCss = false;
+    if (expressionEvaluationIndentation && currentChar === "{") {
+      expressionEvaluationIndentation++;
+    }
+
+    if (
+      !expressionEvaluationIndentation &&
+      isExtractingCss &&
+      currentChar === "$" &&
+      content.slice(cursor, cursor + 2) === "${"
+    ) {
+      expressionEvaluationIndentation++;
+      cursor += 1;
+      current += "${";
+      continue;
+    }
+
+    if (expressionEvaluationIndentation && currentChar === "}") {
+      expressionEvaluationIndentation--;
+    }
+
+    if (
+      isExtractingCss &&
+      !expressionEvaluationIndentation &&
+      currentChar === "`"
+    ) {
+      isExtractingCss = false;
 
       css.push(
         `/*___start___*/.css${cssInJSOccurrence++}{${current}}/*___end___*/`,
