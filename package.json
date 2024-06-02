@@ -1,6 +1,6 @@
 {
   "name": "stylelint-css-in-js-syntax",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "types": "./src/index.ts",
   "main": "./lib/cjs/index.js",
@@ -67,8 +67,8 @@
     "rollup": "^4.18.0",
     "rollup-plugin-esbuild": "^6.1.1",
     "stylelint": "^16.6.1",
-    "stylelint-css-in-js-syntax": "link:./",
     "stylelint-config-standard": "^36.0.0",
+    "stylelint-css-in-js-syntax": "link:./",
     "stylelint-no-unsupported-browser-features": "^8.0.1",
     "typescript": "^5.4.5"
   },
