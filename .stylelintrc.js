@@ -21,7 +21,12 @@ module.exports = {
     "length-zero-no-unit": [true, { ignore: "custom-properties" }],
     "alpha-value-notation": "number",
 
-    // we ship our own CSS-in-JS formatting, and as such we disable built-in stylelint formatting.
+    "media-feature-range-notation": "prefix",
+    "custom-property-pattern": null,
+
+    // we ship our own CSS-in-JS formatting, and as such we disable built-in
+    // stylelint formatting.
+    "rule-empty-line-before": null,
     "declaration-empty-line-before": null,
   },
 };
