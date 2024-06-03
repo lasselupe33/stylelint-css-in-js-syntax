@@ -26,7 +26,7 @@ export function parser(content: string, opts: ProcessOptions) {
   return parsed;
 }
 
-const NEW_STATEMENT_INDICATORS = [":", "{", "@", ".", "#", "&"];
+const NEW_STATEMENT_INDICATORS = [":", "{", "@", "#", "&"];
 
 /**
  * unclosed delcarations will cause the VSCode stylelint plugin to throw errors
