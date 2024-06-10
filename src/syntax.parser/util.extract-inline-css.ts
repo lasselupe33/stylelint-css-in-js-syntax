@@ -42,6 +42,7 @@ export function extractInlineCss(content: string): string {
       content.slice(cursor - 1, cursor + 4) !== '"css`'
     ) {
       isExtractingCss = true;
+      hasUnclosedBacktick = true;
 
       const newlineCount = current.split("\n").length - 1;
       surrounding.push(
@@ -53,7 +54,7 @@ export function extractInlineCss(content: string): string {
       continue;
     }
 
-    if (currentChar === "`") {
+    if (!isExtractingCss && currentChar === "`") {
       hasUnclosedBacktick = !hasUnclosedBacktick;
     }
 
@@ -83,6 +84,7 @@ export function extractInlineCss(content: string): string {
       currentChar === "`"
     ) {
       isExtractingCss = false;
+      hasUnclosedBacktick = false;
 
       css.push(
         `/*___start___*/.css${cssInJSOccurrence++}{${current}}/*___end___*/`,
