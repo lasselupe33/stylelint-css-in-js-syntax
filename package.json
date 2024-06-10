@@ -1,6 +1,6 @@
 {
   "name": "stylelint-css-in-js-syntax",
-  "version": "0.4.7",
+  "version": "0.5.0",
   "description": "",
   "types": "./src/index.ts",
   "main": "./lib/cjs/index.js",
