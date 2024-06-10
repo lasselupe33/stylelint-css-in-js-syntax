@@ -30,11 +30,21 @@ export /**
  */
 function fixUnclosedDelcarations(content: string): string {
   let cssString = "";
+  let isInsideComment = false;
 
   for (let cursor = 0; cursor < content.length; cursor++) {
     const currentChar = content[cursor];
 
     if (
+      !isInsideComment &&
+      currentChar === "/" &&
+      content[cursor + 1] === "*"
+    ) {
+      isInsideComment = true;
+    }
+
+    if (
+      !isInsideComment &&
       currentChar === ":" &&
       cssProperties.includes(getPreviousWord(content, cursor))
     ) {
@@ -50,6 +60,10 @@ function fixUnclosedDelcarations(content: string): string {
 
         continue;
       }
+    }
+
+    if (isInsideComment && currentChar === "*" && content[cursor + 1] === "/") {
+      isInsideComment = false;
     }
 
     cssString += currentChar;
