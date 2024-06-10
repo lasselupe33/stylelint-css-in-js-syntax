@@ -65,7 +65,7 @@ export default {
         "unit-no-unknown": [
           true,
           {
-            ignoreUnits: [/_/],
+            ignoreUnits: [/_|ˍ|.|꞉|，|⸨|⸩|❴|❵|⁅|⁆/],
           },
         ],
 
