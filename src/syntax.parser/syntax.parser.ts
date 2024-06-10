@@ -1,10 +1,9 @@
 import rootPostcss, { ProcessOptions } from "postcss";
 
-import { stringifyExpressions } from "../util.stringify-expressions";
-
 import { extractInlineCss } from "./util.extract-inline-css";
 import { extractQuasisAndExpressions } from "./util.extract-quasis-and-expressions";
 import { fixUnclosedDelcarations } from "./util.fix-unclosed-declarations";
+import { stringifyExpressions } from "./util.stringify-expressions";
 
 const postcss = rootPostcss();
 

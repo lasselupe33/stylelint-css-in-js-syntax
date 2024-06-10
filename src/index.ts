@@ -8,20 +8,26 @@ export default {
         "*.js",
         "**/*.jsx",
         "*.jsx",
+        "**/*.mjs",
+        "*.mjs",
+        "**/*.cjs",
+        "*.cjs",
         "**/*.ts",
         "*.ts",
         "**/*.tsx",
         "*.tsx",
+        "**/*.mts",
+        "*.mts",
       ],
       customSyntax: syntax,
       extends: ["stylelint-config-standard"],
       rules: {
         // We should allow stringified js expressions inside CSS.
-        "property-no-unknown": [true, { ignoreProperties: /custom-js__/ }],
+        "property-no-unknown": [true, { ignoreProperties: /^ref/ }],
 
         // We may include js expressions as selectors, and the stringified
         // output should be allowed here.
-        "selector-type-no-unknown": [true, { ignoreTypes: /custom-prop__/ }],
+        "selector-type-no-unknown": [true, { ignoreTypes: /^ref/ }],
 
         // We use custom JS to define our fonts, and herein generics should be
         // provided
@@ -30,16 +36,17 @@ export default {
         // Our stringified js relies on css comments in order to preserve the
         // JS source. We do not want Stylelint to interfere or attempt to format
         // this.
+        "comment-empty-line-before": null,
         "comment-whitespace-inside": null,
 
         // Our stringified js expressions do not follow a specific formatting,
         // and this should not raise an error.
-        "value-keyword-case": ["lower", { ignoreKeywords: /custom-(js|prop)/ }],
+        "value-keyword-case": ["lower", { ignoreKeywords: /^ref/ }],
 
         // our selectors will likely include js expressions, and as such
         // we cannot enforce this rule.
         "selector-class-pattern": null,
-        "selector-type-case": ["lower", { ignoreTypes: /custom-(js|prop)/ }],
+        "selector-type-case": ["lower", { ignoreTypes: /^ref/ }],
 
         // stringified js may be used for font-families, and this should be
         // allowed without raising any warnings.

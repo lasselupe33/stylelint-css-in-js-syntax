@@ -3,6 +3,7 @@ export function stringifyExpressions(
   expressions: string[],
 ) {
   let cssString = "";
+  const refs = [] as string[];
 
   for (let i = 0; i < quasis.length; i++) {
     const currentQuasi = quasis[i]?.value.cooked;
@@ -17,11 +18,22 @@ export function stringifyExpressions(
         "*/";
 
       const nextQuasi = quasis[i + 1]?.value.cooked.trimStart();
-      const newlineCount = nextExpression.split("\n").length - 1;
 
       const currentQuasiEndsWithNewLine = /\n( |\t\r)*?/.test(
         currentQuasi ?? "",
       );
+
+      const base64Expression = Buffer.from(nextExpression).toString("base64");
+      const refIndexToExpression = (() => {
+        const existingIndex = refs.indexOf(base64Expression);
+
+        if (existingIndex !== -1) {
+          return existingIndex;
+        } else {
+          refs.push(base64Expression);
+          return refs.length - 1;
+        }
+      })();
 
       if (
         (!nearestChar ||
@@ -35,18 +47,26 @@ export function stringifyExpressions(
           nextQuasi?.startsWith("\n") ||
           nextQuasi?.startsWith(";"))
       ) {
-        cssString += `custom-js__${newlineCount}_${Buffer.from(
-          nextExpression,
-        ).toString("base64")}__:ignore${"\n".repeat(newlineCount)}${
+        cssString += `ref-${refIndexToExpression}:ignore_${sanitizeExpression(nextExpression)}_${
           nextQuasi?.startsWith(";") || nextQuasi?.startsWith("{") ? "" : ";"
         }`;
       } else {
-        cssString += `custom-prop__${newlineCount}_${Buffer.from(
-          nextExpression,
-        ).toString("base64")}__${"\n".repeat(newlineCount)}`;
+        cssString += `ref-${refIndexToExpression}_${sanitizeExpression(nextExpression)}_`;
       }
     }
   }
 
+  cssString += `/*refs ${refs.join(";")}*/`;
+
   return cssString;
+}
+
+function sanitizeExpression(expression: string): string {
+  return expression
+    .replaceAll(/[^A-Za-z\d]/g, ($1) => `\\${$1}`)
+    .replaceAll("\\.", ".")
+    .replaceAll("\\(", "⸨")
+    .replaceAll("\\)", "⸩")
+    .replaceAll("\\[", "⁅")
+    .replaceAll("\\]", "⁆");
 }

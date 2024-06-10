@@ -7,6 +7,7 @@ export function stringifier(root: Root, builder: Builder) {
     .replaceAll(/\/\*___start___\*\/.css\d+?{/g, "css`")
     .replaceAll("}/*___end___*/", "`")
     .replaceAll("/*__auto-close__*/;", "")
+    .replace(/\/\*refs (.*)\*\//, "")
     .replaceAll(/\/\*___js___(.*?)___js-end___\n*\*\//gm, (replaceable) => {
       const base64js = replaceable
         .replace(/^\/\*___js___/, "")
