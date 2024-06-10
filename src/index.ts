@@ -41,7 +41,10 @@ export default {
 
         // Our stringified js expressions do not follow a specific formatting,
         // and this should not raise an error.
-        "value-keyword-case": ["lower", { ignoreKeywords: /^ref/ }],
+        "value-keyword-case": [
+          "lower",
+          { ignoreKeywords: [/^ref/, /^ignore_/, "currentColor"] },
+        ],
 
         // our selectors will likely include js expressions, and as such
         // we cannot enforce this rule.
@@ -59,6 +62,15 @@ export default {
         // in CSS-in-JS empty classes (i.e. css``) may be used for purposes
         // inside JS.
         "block-no-empty": null,
+
+        // custom js, stringified into ref-x_${expr}_ should be considered as a
+        // valid unit, as we cannot infer its actual value.
+        "unit-no-unknown": [
+          true,
+          {
+            ignoreUnits: /_/,
+          },
+        ],
 
         // :global is frequently used in CSS-in-JS solutions to allow unscoped
         // css from being written from within the css`` directive
