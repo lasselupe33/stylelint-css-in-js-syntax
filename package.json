@@ -73,6 +73,7 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "known-css-properties": "^0.31.0",
     "postcss": "^8.4.38"
   }
 }

@@ -4,8 +4,8 @@ export default {
   overrides: [
     {
       files: [
+        "**/*.js",
         "*.js",
-        "**/.js",
         "**/*.jsx",
         "*.jsx",
         "**/*.ts",
