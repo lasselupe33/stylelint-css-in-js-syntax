@@ -78,6 +78,7 @@ function isDeclarationClosedCorrectly(
 ):
   | { isClosedCorrectly: true }
   | { isClosedCorrectly: false; canBeCorrectedAtIndex: number } {
+  let isInsideComment = false;
   let isEvaluatingFontName = false;
   let firstNewlineIndex: number | undefined = undefined;
 
@@ -87,6 +88,14 @@ function isDeclarationClosedCorrectly(
     correctionCursor++
   ) {
     const nextChar = content[correctionCursor] ?? "";
+
+    if (
+      !isInsideComment &&
+      nextChar === "/" &&
+      content[correctionCursor + 1] === "*"
+    ) {
+      isInsideComment = true;
+    }
 
     if (!firstNewlineIndex && nextChar === "\n") {
       firstNewlineIndex = correctionCursor;
@@ -100,11 +109,23 @@ function isDeclarationClosedCorrectly(
       isEvaluatingFontName = !isEvaluatingFontName;
     }
 
-    if (!isEvaluatingFontName && NEW_STATEMENT_INDICATORS.includes(nextChar)) {
+    if (
+      !isInsideComment &&
+      !isEvaluatingFontName &&
+      NEW_STATEMENT_INDICATORS.includes(nextChar)
+    ) {
       return {
         isClosedCorrectly: false,
         canBeCorrectedAtIndex: firstNewlineIndex || correctionCursor,
       };
+    }
+
+    if (
+      isInsideComment &&
+      nextChar === "*" &&
+      content[correctionCursor + 1] === "/"
+    ) {
+      isInsideComment = false;
     }
   }
 

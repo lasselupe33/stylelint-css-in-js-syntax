@@ -16,6 +16,8 @@ export function stringifyExpressions(
       const hasCommentBefore =
         `${cssString?.replace(/\n/g, "").trimEnd().at(-2)}${nearestChar}` ===
         "*/";
+      const hasCommentBeforeOnSameLine =
+        `${cssString.trimEnd().at(-2)}${nearestChar}` === "*/";
 
       const nextQuasi = quasis[i + 1]?.value.cooked.trimStart();
 
@@ -35,10 +37,12 @@ export function stringifyExpressions(
         }
       })();
 
+      const newlineCount = nextExpression.split("\n").length - 1;
+
       if (
         (!nearestChar ||
           ["{", ";", "}"].includes(nearestChar) ||
-          hasCommentBefore) &&
+          (hasCommentBefore && !hasCommentBeforeOnSameLine)) &&
         !nextQuasi?.startsWith("{") &&
         !nextQuasi?.startsWith("&") &&
         !nextQuasi?.startsWith(".") &&
@@ -47,11 +51,15 @@ export function stringifyExpressions(
           nextQuasi?.startsWith("\n") ||
           nextQuasi?.startsWith(";"))
       ) {
-        cssString += `ref-${refIndexToExpression}:ignore_${sanitizeExpression(nextExpression)}_${
+        cssString += `ref-${refIndexToExpression}:ignore${"\n".repeat(newlineCount)}_${
           nextQuasi?.startsWith(";") || nextQuasi?.startsWith("{") ? "" : ";"
         }`;
       } else {
-        cssString += `ref-${refIndexToExpression}_${sanitizeExpression(nextExpression)}_`;
+        const sanitizedExpression = sanitizeExpression(
+          nextExpression,
+        ).replaceAll("\n", " ");
+
+        cssString += `ref-${refIndexToExpression}_${sanitizedExpression}${"\n".repeat(newlineCount)}_`;
       }
     }
   }
@@ -63,15 +71,15 @@ export function stringifyExpressions(
 
 function sanitizeExpression(expression: string): string {
   return expression
-    .replaceAll(" ", "")
-    .replaceAll("_", "ˍ")
-    .replaceAll(".", ".")
-    .replaceAll(":", "꞉")
-    .replaceAll(",", "，")
-    .replaceAll("(", "⸨")
-    .replaceAll(")", "⸩")
-    .replaceAll("{", "❴")
-    .replaceAll("}", "❵")
-    .replaceAll("[", "⁅")
-    .replaceAll("]", "⁆");
+    .replaceAll(/[^A-Za-z\d]/g, ($1) => `\\${$1}`)
+    .replaceAll("\\_", "ˍ")
+    .replaceAll("\\.", ".")
+    .replaceAll("\\:", "꞉")
+    .replaceAll("\\,", "，")
+    .replaceAll("\\(", "⸨")
+    .replaceAll("\\)", "⸩")
+    .replaceAll("\\{", "❴")
+    .replaceAll("\\}", "❵")
+    .replaceAll("\\[", "⁅")
+    .replaceAll("\\]", "⁆");
 }

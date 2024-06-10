@@ -27,7 +27,7 @@ export default {
 
         // We may include js expressions as selectors, and the stringified
         // output should be allowed here.
-        "selector-type-no-unknown": [true, { ignoreTypes: /^ref/ }],
+        "selector-type-no-unknown": [true, { ignoreTypes: [/^ref/, /_/] }],
 
         // We use custom JS to define our fonts, and herein generics should be
         // provided
@@ -65,7 +65,7 @@ export default {
         "unit-no-unknown": [
           true,
           {
-            ignoreUnits: [/_|ˍ|，|.|꞉|⸨|⸩|❴|❵|⁅|⁆/],
+            ignoreUnits: [/_/],
           },
         ],
 
