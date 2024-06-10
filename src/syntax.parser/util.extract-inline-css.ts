@@ -6,12 +6,33 @@ export function extractInlineCss(content: string): string {
 
   let current = "";
   let isExtractingCss = false;
+  let currentCssCommentType: "single-line" | "multi-line" | undefined =
+    undefined;
   let expressionEvaluationIndentation = 0;
 
   for (let cursor = 0; cursor < content.length; cursor++) {
     const currentChar = content[cursor];
 
     if (
+      !isExtractingCss &&
+      !currentCssCommentType &&
+      currentChar === "/" &&
+      content[cursor + 1] === "*"
+    ) {
+      currentCssCommentType = "multi-line";
+    }
+
+    if (
+      !isExtractingCss &&
+      !currentCssCommentType &&
+      currentChar === "/" &&
+      content[cursor + 1] === "/"
+    ) {
+      currentCssCommentType = "single-line";
+    }
+
+    if (
+      !currentCssCommentType &&
       !isExtractingCss &&
       currentChar === "c" &&
       content.slice(cursor, cursor + 4) === "css`" &&
@@ -61,6 +82,18 @@ export function extractInlineCss(content: string): string {
       );
       current = "";
       continue;
+    }
+
+    if (
+      currentCssCommentType === "multi-line" &&
+      currentChar === "*" &&
+      content[cursor + 1] === "/"
+    ) {
+      currentCssCommentType = undefined;
+    }
+
+    if (currentCssCommentType === "single-line" && currentChar === "\n") {
+      currentCssCommentType = undefined;
     }
 
     current += content[cursor];
