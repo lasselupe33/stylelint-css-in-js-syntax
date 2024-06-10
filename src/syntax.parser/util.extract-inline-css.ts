@@ -5,6 +5,8 @@ export function extractInlineCss(content: string): string {
   const css = [] as string[];
 
   let current = "";
+
+  let hasUnclosedBacktick = false;
   let isExtractingCss = false;
   let currentCssCommentType: "single-line" | "multi-line" | undefined =
     undefined;
@@ -32,6 +34,7 @@ export function extractInlineCss(content: string): string {
     }
 
     if (
+      !hasUnclosedBacktick &&
       !currentCssCommentType &&
       !isExtractingCss &&
       currentChar === "c" &&
@@ -48,6 +51,10 @@ export function extractInlineCss(content: string): string {
 
       cursor += 3;
       continue;
+    }
+
+    if (currentChar === "`") {
+      hasUnclosedBacktick = !hasUnclosedBacktick;
     }
 
     if (expressionEvaluationIndentation && currentChar === "{") {
