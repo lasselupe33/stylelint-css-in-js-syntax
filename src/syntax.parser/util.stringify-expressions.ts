@@ -65,6 +65,7 @@ function sanitizeExpression(expression: string): string {
   return expression
     .replaceAll(" ", "")
     .replaceAll(/[^A-Za-z\d]/g, ($1) => `\\${$1}`)
+    .replaceAll("\\_", "ˍ")
     .replaceAll("\\.", ".")
     .replaceAll("\\:", "꞉")
     .replaceAll("\\(", "⸨")
