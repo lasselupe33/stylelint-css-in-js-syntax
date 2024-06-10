@@ -57,7 +57,7 @@ export function stringifyExpressions(
       } else {
         const sanitizedExpression = sanitizeExpression(
           nextExpression,
-        ).replaceAll("\n", " ");
+        ).replaceAll("\n", "");
 
         cssString += `ref-${refIndexToExpression}_${sanitizedExpression}${"\n".repeat(newlineCount)}_`;
       }
@@ -71,6 +71,8 @@ export function stringifyExpressions(
 
 function sanitizeExpression(expression: string): string {
   return expression
+    .replaceAll(" ", "")
+    .replaceAll("\n", " ")
     .replaceAll(/[^A-Za-z\d]/g, ($1) => `\\${$1}`)
     .replaceAll("\\_", "ˍ")
     .replaceAll("\\.", ".")
