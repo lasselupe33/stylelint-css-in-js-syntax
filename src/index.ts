@@ -23,11 +23,11 @@ export default {
       extends: ["stylelint-config-standard"],
       rules: {
         // We should allow stringified js expressions inside CSS.
-        "property-no-unknown": [true, { ignoreProperties: /^ref/ }],
+        "property-no-unknown": [true, { ignoreProperties: /ref-/ }],
 
         // We may include js expressions as selectors, and the stringified
         // output should be allowed here.
-        "selector-type-no-unknown": [true, { ignoreTypes: [/^ref/, /_/] }],
+        "selector-type-no-unknown": [true, { ignoreTypes: [/ref-/, /_/] }],
 
         // We use custom JS to define our fonts, and herein generics should be
         // provided
@@ -46,7 +46,7 @@ export default {
         // our selectors will likely include js expressions, and as such
         // we cannot enforce this rule.
         "selector-class-pattern": null,
-        "selector-type-case": ["lower", { ignoreTypes: /^ref/ }],
+        "selector-type-case": ["lower", { ignoreTypes: /ref-/ }],
 
         // stringified js may be used for font-families, and this should be
         // allowed without raising any warnings.
