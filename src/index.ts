@@ -41,10 +41,7 @@ export default {
 
         // Our stringified js expressions do not follow a specific formatting,
         // and this should not raise an error.
-        "value-keyword-case": [
-          "lower",
-          { ignoreKeywords: [/^ref/, /^ignore_/, "currentColor"] },
-        ],
+        "value-keyword-case": null,
 
         // our selectors will likely include js expressions, and as such
         // we cannot enforce this rule.

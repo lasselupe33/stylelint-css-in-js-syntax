@@ -8,7 +8,7 @@ export function restoreExpressions(rawCss: string) {
   }
 
   return rawCss
-    .replace(/ref-\d+:ignore_(.*?)_;?/gm, (replaceable) => {
+    .replace(/ref-\d+:ignore_((.|\s)*?)_;?/gm, (replaceable) => {
       const refIndex = Number(replaceable.match(/ref-(\d+)/)?.[1]);
       const base64js = refs[refIndex] ?? "";
       const includeSemiColon = replaceable.trimEnd().endsWith(";");
@@ -17,7 +17,7 @@ export function restoreExpressions(rawCss: string) {
         includeSemiColon ? ";" : ""
       }`;
     })
-    .replace(/ref-\d+_(.*?)_/gm, (replaceable) => {
+    .replace(/ref-\d+_((.|\s)*?)_/gm, (replaceable) => {
       const refIndex = Number(replaceable.match(/ref-(\d+)/)?.[1]);
       const base64js = refs[refIndex] ?? "";
 
