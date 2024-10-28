@@ -4,7 +4,7 @@ import { getPreviousWord } from "../util.get-previous-word";
 
 const NEW_STATEMENT_INDICATORS = [":", "{", "@", "&"];
 
-export /**
+/**
  * unclosed delcarations will cause the VSCode stylelint plugin to throw errors
  * whenever unclosed declarations are followed by rules, queries or similar
  * content.
@@ -28,7 +28,7 @@ export /**
  *    .${selector} {}
  * ```
  */
-function fixUnclosedDelcarations(content: string): string {
+export function fixUnclosedDelcarations(content: string): string {
   let cssString = "";
   let isInsideComment = false;
 

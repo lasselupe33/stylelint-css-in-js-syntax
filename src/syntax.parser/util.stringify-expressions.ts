@@ -46,6 +46,8 @@ export function stringifyExpressions(
         !nextQuasi?.startsWith("{") &&
         !nextQuasi?.startsWith("&") &&
         !nextQuasi?.startsWith(".") &&
+        !nextQuasi?.startsWith("[") &&
+        !nextQuasi?.startsWith("$") &&
         nextQuasi !== "" &&
         ((currentQuasiEndsWithNewLine && !nextQuasi?.trim().startsWith(":")) ||
           nextQuasi?.startsWith("\n") ||
